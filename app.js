@@ -100,7 +100,7 @@ async function fetchJSON(path) {
 
 async function loadAllData() {
   try {
-    const json = await fetchJSON('data/worldbank/worldbank_data.json');
+    const json = await fetchJSON('data/worldbank/countries.json');
     const raw = Array.isArray(json) ? json : (json.countries || []);
     S.countries = parseWorldBank(raw);
     console.log(`✓ worldbank_data.json — ${S.countries.length} countries`);
