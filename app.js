@@ -386,63 +386,91 @@ function renderWBEconomy(id) {
   ]);
 }
 
-// ── EXTRA SECTIONS ─────────────────────────────────
+// ── LABOUR / FISCAL / INNOVATION / HEALTH / EDUCATION / ENVIRONMENT / INEQUALITY ──────────
 
 function renderOECDLabour(c) {
-  return section('Labour Market', 'wb', 'Labour Indicators', [
-    dataRow('Avg Hours Worked per Year', fmt(oecd(c,'hoursWorked'), 0),       oecdyr(c,'hoursWorked')),
-    dataRow('Trade Union Density',       fmtPct(oecd(c,'unionDensity')),      oecdyr(c,'unionDensity')),
-    dataRow('Real Wage Growth',          fmtPct(oecd(c,'wageGrowth')),        oecdyr(c,'wageGrowth')),
-    dataRow('GDP per Hour Worked',       fmtUSD(oecd(c,'gdpPerHour')),        oecdyr(c,'gdpPerHour')),
+  return section('Labour Market', 'imf', 'Labour Market Indicators', [
+    dataRow('Unemployment Rate',         fmtPct(imf(c,'unemployment')),       imfyr(c,'unemployment')),
+    dataRow('Employment (millions)',      fmt(imf(c,'employment'), 1),         imfyr(c,'employment')),
+    dataRow('Avg Hours Worked / Year',   fmt(oecd(c,'hoursWorked'), 0),       oecdyr(c,'hoursWorked')),
+    dataRow('Labor Force Participation', fmtPct(owid(c,'laborForce')),        owidyr(c,'laborForce')),
+    dataRow('Female Labor Participation',fmtPct(owid(c,'femaleLaborForce')),  owidyr(c,'femaleLaborForce')),
   ]);
 }
 
 function renderOECDFiscal(c) {
-  return section('Tax & Fiscal', 'wb', 'Tax & Fiscal Indicators', [
-    dataRow('Tax Revenue (% GDP)',      fmtPct(oecd(c,'taxRevenue')),      oecdyr(c,'taxRevenue')),
-    dataRow('Social Spending (% GDP)',  fmtPct(oecd(c,'socialSpending')),  oecdyr(c,'socialSpending')),
-    dataRow('Pension Spending (% GDP)', fmtPct(oecd(c,'pensionSpend')),    oecdyr(c,'pensionSpend')),
-    dataRow('Family Spending (% GDP)',  fmtPct(oecd(c,'familySpend')),     oecdyr(c,'familySpend')),
-    dataRow('Unemployment Benefits',    fmtPct(oecd(c,'unempBenefits')),   oecdyr(c,'unempBenefits')),
+  return section('Tax & Fiscal', 'imf', 'Tax & Fiscal Indicators', [
+    dataRow('Govt Revenue (% GDP)',     fmtPct(imf(c,'govtRevenue')),      imfyr(c,'govtRevenue')),
+    dataRow('Govt Expenditure (% GDP)', fmtPct(imf(c,'govtExpenditure')), imfyr(c,'govtExpenditure')),
+    dataRow('Fiscal Balance (% GDP)',   fmtPct(imf(c,'fiscalBalance')),    imfyr(c,'fiscalBalance')),
+    dataRow('Govt Debt (% GDP)',        fmtPct(imf(c,'govtDebt')),         imfyr(c,'govtDebt')),
+    dataRow('Military Spend (% GDP)',   fmtPct(owid(c,'militarySpend')),   owidyr(c,'militarySpend')),
   ]);
 }
 
 function renderOECDInnovation(c) {
-  return section('Innovation & Productivity', 'wb', 'Innovation & Productivity', [
-    dataRow('R&D Expenditure (% GDP)', fmtPct(oecd(c,'rdSpending')),  oecdyr(c,'rdSpending')),
-    dataRow('GDP per Hour Worked',     fmtUSD(oecd(c,'gdpPerHour')), oecdyr(c,'gdpPerHour')),
+  return section('Innovation & Trade', 'wb', 'Innovation & Trade Indicators', [
+    dataRow('Internet Users (%)',        fmtPct(wb(c.id,'internetUsers')),     wbyr(c.id,'internetUsers')),
+    dataRow('Mobile Subscriptions/100',  fmt(wb(c.id,'mobileSubscriptions'),1),wbyr(c.id,'mobileSubscriptions')),
+    dataRow('Trade (% GDP)',             fmtPct(wb(c.id,'tradeGDP')),          wbyr(c.id,'tradeGDP')),
+    dataRow('FDI Net Inflows',           fmtUSD(wb(c.id,'fdi')),               wbyr(c.id,'fdi')),
+    dataRow('Tourist Arrivals',          fmt(owid(c,'touristArrivals'), 0),     owidyr(c,'touristArrivals')),
   ]);
 }
 
 function renderOECDHealth(c) {
-  return section('Health Resources', 'wb', 'Health Resources', [
-    dataRow('Hospital Beds per 1,000', fmt(oecd(c,'hospitalBeds'), 1), oecdyr(c,'hospitalBeds')),
-    dataRow('Nurses per 1,000',        fmt(oecd(c,'nurses'), 1),       oecdyr(c,'nurses')),
-    dataRow('Doctors per 1,000',       fmt(oecd(c,'doctors'), 1),      oecdyr(c,'doctors')),
+  return section('Health Resources', 'wb', 'Health System Indicators', [
+    dataRow('Physicians per 1,000',      fmt(wb(c.id,'physicians'), 2),        wbyr(c.id,'physicians')),
+    dataRow('Health Spending (% GDP)',   fmtPct(wb(c.id,'healthSpendGDP')),    wbyr(c.id,'healthSpendGDP')),
+    dataRow('Hospital Beds per 1,000',   fmt(oecd(c,'hospitalBeds'), 1),       oecdyr(c,'hospitalBeds')),
+    dataRow('Nurses per 1,000',          fmt(oecd(c,'nurses'), 1),             oecdyr(c,'nurses')),
+    dataRow('Obesity Rate (%)',          fmtPct(owid(c,'obesityRate')),         owidyr(c,'obesityRate')),
+    dataRow('Smoking Rate (%)',          fmtPct(owid(c,'smokingRate')),         owidyr(c,'smokingRate')),
+    dataRow('Diabetes Prevalence (%)',   fmtPct(owid(c,'diabetesRate')),        owidyr(c,'diabetesRate')),
+    dataRow('Alcohol (L pure/capita)',   fmt(owid(c,'alcoholConsump'), 1),      owidyr(c,'alcoholConsump')),
   ]);
 }
 
 function renderOECDEducation(c) {
-  return section('Education Scores', 'wb', 'Education Scores', [
-    dataRow('PISA Math Score',    fmt(oecd(c,'pisaMath'), 0),    oecdyr(c,'pisaMath')),
-    dataRow('PISA Reading Score', fmt(oecd(c,'pisaRead'), 0),    oecdyr(c,'pisaRead')),
-    dataRow('PISA Science Score', fmt(oecd(c,'pisaScience'), 0), oecdyr(c,'pisaScience')),
+  return section('Education', 'wb', 'Education Indicators', [
+    dataRow('Primary Enrollment (%)',    fmtPct(wb(c.id,'primaryEnrollment')),   wbyr(c.id,'primaryEnrollment')),
+    dataRow('Secondary Enrollment (%)', fmtPct(wb(c.id,'secondaryEnrollment')), wbyr(c.id,'secondaryEnrollment')),
+    dataRow('Tertiary Enrollment (%)',  fmtPct(wb(c.id,'tertiaryEnrollment')),  wbyr(c.id,'tertiaryEnrollment')),
+    dataRow('Education Spend (% GDP)',  fmtPct(wb(c.id,'educationSpendGDP')),   wbyr(c.id,'educationSpendGDP')),
+    dataRow('Mean Years of Schooling',  fmt(owid(c,'meanSchoolingOwid'), 1),    owidyr(c,'meanSchoolingOwid')),
+    dataRow('PISA Math Score',          fmt(oecd(c,'pisaMath'), 0),             oecdyr(c,'pisaMath')),
+    dataRow('PISA Reading Score',       fmt(oecd(c,'pisaRead'), 0),             oecdyr(c,'pisaRead')),
+    dataRow('PISA Science Score',       fmt(oecd(c,'pisaScience'), 0),          oecdyr(c,'pisaScience')),
   ]);
 }
 
 function renderOECDEnvironment(c) {
-  return section('Environment', 'owid', 'Environment Indicators', [
-    dataRow('GHG Emissions (Mt CO2 eq)', fmt(oecd(c,'ghgEmissions'), 1),   oecdyr(c,'ghgEmissions')),
-    dataRow('Municipal Waste (kg/cap)',  fmt(oecd(c,'municipalWaste'), 0), oecdyr(c,'municipalWaste')),
+  return section('Environment', 'owid', 'Environment & Energy Indicators', [
+    dataRow('CO2 Emissions (Mt)',        fmt(owid(c,'co2'), 1),               owidyr(c,'co2')),
+    dataRow('CO2 per Capita (t)',        fmt(owid(c,'co2PerCap'), 1),         owidyr(c,'co2PerCap')),
+    dataRow('Total GHG (Mt CO2eq)',      fmt(owid(c,'totalGhg'), 1),          owidyr(c,'totalGhg')),
+    dataRow('Share of Global CO2 (%)',   fmt(owid(c,'shareGlobalCo2'), 2),    owidyr(c,'shareGlobalCo2')),
+    dataRow('Renewable Energy (%)',      fmtPct(wb(c.id,'renewableEnergy')),  wbyr(c.id,'renewableEnergy')),
+    dataRow('Renewable Elec Share (%)',  fmtPct(owid(c,'renewableShare')),    owidyr(c,'renewableShare')),
+    dataRow('Solar Elec Share (%)',      fmtPct(owid(c,'solarShare')),        owidyr(c,'solarShare')),
+    dataRow('Wind Elec Share (%)',       fmtPct(owid(c,'windShare')),         owidyr(c,'windShare')),
+    dataRow('Nuclear Elec Share (%)',    fmtPct(owid(c,'nuclearShare')),      owidyr(c,'nuclearShare')),
+    dataRow('Forest Area (%)',           fmtPct(wb(c.id,'forestArea')),       wbyr(c.id,'forestArea')),
+    dataRow('Plastic Waste (kg/cap)',    fmt(owid(c,'plasticWaste'), 1),      owidyr(c,'plasticWaste')),
+    dataRow('Air Pollution Deaths',      fmt(owid(c,'airPollutionDeaths'),1), owidyr(c,'airPollutionDeaths')),
   ]);
 }
 
 function renderOECDInequality(c) {
-  return section('Inequality & Income', 'wb', 'Inequality & Income', [
-    dataRow('Gini Coefficient',        fmt(oecd(c,'gini'), 2),        oecdyr(c,'gini')),
-    dataRow('Poverty Rate',            fmtPct(oecd(c,'povertyRate')), oecdyr(c,'povertyRate')),
-    dataRow('Median Household Income', fmtUSD(oecd(c,'medianIncome')),oecdyr(c,'medianIncome')),
-    dataRow('Palma Ratio',             fmt(oecd(c,'palmaRatio'), 2),  oecdyr(c,'palmaRatio')),
+  return section('Inequality & Income', 'wb', 'Inequality & Poverty Indicators', [
+    dataRow('Gini Coefficient',          fmt(wb(c.id,'gini'), 1),             wbyr(c.id,'gini')),
+    dataRow('Poverty Rate (.15/day)',  fmtPct(wb(c.id,'povertyRate')),      wbyr(c.id,'povertyRate')),
+    dataRow('Poverty Rate (.50/day)',  fmtPct(wb(c.id,'povertyRatio550')),  wbyr(c.id,'povertyRatio550')),
+    dataRow('Extreme Poverty (OWID)',    fmtPct(owid(c,'extremePoverty')),    owidyr(c,'extremePoverty')),
+    dataRow('Homicide Rate (per 100k)', fmt(owid(c,'homicideRate'), 1),       owidyr(c,'homicideRate')),
+    dataRow('Women in Parliament (%)',  fmtPct(owid(c,'womenInParl')),        owidyr(c,'womenInParl')),
+    dataRow('Happiness Score (0-10)',   fmt(owid(c,'happinessScore'), 2),     owidyr(c,'happinessScore')),
+    dataRow('Democracy Index',          fmt(owid(c,'democracyIndex'), 2),     owidyr(c,'democracyIndex')),
   ]);
 }
 
