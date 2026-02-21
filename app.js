@@ -149,7 +149,7 @@ async function loadAllData() {
   const sources = [
     Object.keys(S.countryData).length > 0 ? 'World Bank' : null,
     Object.keys(S.imfData).length > 0     ? 'IMF'        : null,
-    Object.keys(S.oecdData).length > 0    ? 'OECD'       : null,
+    
     Object.keys(S.unData).length > 0      ? 'UN'         : null,
   ].filter(Boolean);
   toast(`✓ Loaded: ${sources.join(' · ')}`);
@@ -386,10 +386,10 @@ function renderWBEconomy(id) {
   ]);
 }
 
-// ── OECD SECTIONS ────────────────────────────────────
+// ── EXTRA SECTIONS ─────────────────────────────────
 
 function renderOECDLabour(c) {
-  return section('Labour Market — OECD', 'oecd', 'OECD Labour Indicators', [
+  return section('Labour Market', 'wb', 'Labour Indicators', [
     dataRow('Avg Hours Worked per Year', fmt(oecd(c,'hoursWorked'), 0),       oecdyr(c,'hoursWorked')),
     dataRow('Trade Union Density',       fmtPct(oecd(c,'unionDensity')),      oecdyr(c,'unionDensity')),
     dataRow('Real Wage Growth',          fmtPct(oecd(c,'wageGrowth')),        oecdyr(c,'wageGrowth')),
@@ -398,7 +398,7 @@ function renderOECDLabour(c) {
 }
 
 function renderOECDFiscal(c) {
-  return section('Tax & Fiscal — OECD', 'oecd', 'OECD Tax & Fiscal Indicators', [
+  return section('Tax & Fiscal', 'wb', 'Tax & Fiscal Indicators', [
     dataRow('Tax Revenue (% GDP)',      fmtPct(oecd(c,'taxRevenue')),      oecdyr(c,'taxRevenue')),
     dataRow('Social Spending (% GDP)',  fmtPct(oecd(c,'socialSpending')),  oecdyr(c,'socialSpending')),
     dataRow('Pension Spending (% GDP)', fmtPct(oecd(c,'pensionSpend')),    oecdyr(c,'pensionSpend')),
@@ -408,14 +408,14 @@ function renderOECDFiscal(c) {
 }
 
 function renderOECDInnovation(c) {
-  return section('Innovation — OECD', 'oecd', 'OECD Innovation & Productivity', [
+  return section('Innovation & Productivity', 'wb', 'Innovation & Productivity', [
     dataRow('R&D Expenditure (% GDP)', fmtPct(oecd(c,'rdSpending')),  oecdyr(c,'rdSpending')),
     dataRow('GDP per Hour Worked',     fmtUSD(oecd(c,'gdpPerHour')), oecdyr(c,'gdpPerHour')),
   ]);
 }
 
 function renderOECDHealth(c) {
-  return section('Health — OECD', 'oecd', 'OECD Health Indicators', [
+  return section('Health Resources', 'wb', 'Health Resources', [
     dataRow('Hospital Beds per 1,000', fmt(oecd(c,'hospitalBeds'), 1), oecdyr(c,'hospitalBeds')),
     dataRow('Nurses per 1,000',        fmt(oecd(c,'nurses'), 1),       oecdyr(c,'nurses')),
     dataRow('Doctors per 1,000',       fmt(oecd(c,'doctors'), 1),      oecdyr(c,'doctors')),
@@ -423,7 +423,7 @@ function renderOECDHealth(c) {
 }
 
 function renderOECDEducation(c) {
-  return section('Education — OECD', 'oecd', 'OECD Education Indicators', [
+  return section('Education Scores', 'wb', 'Education Scores', [
     dataRow('PISA Math Score',    fmt(oecd(c,'pisaMath'), 0),    oecdyr(c,'pisaMath')),
     dataRow('PISA Reading Score', fmt(oecd(c,'pisaRead'), 0),    oecdyr(c,'pisaRead')),
     dataRow('PISA Science Score', fmt(oecd(c,'pisaScience'), 0), oecdyr(c,'pisaScience')),
@@ -431,14 +431,14 @@ function renderOECDEducation(c) {
 }
 
 function renderOECDEnvironment(c) {
-  return section('Environment — OECD', 'oecd', 'OECD Environment Indicators', [
+  return section('Environment', 'owid', 'Environment Indicators', [
     dataRow('GHG Emissions (Mt CO2 eq)', fmt(oecd(c,'ghgEmissions'), 1),   oecdyr(c,'ghgEmissions')),
     dataRow('Municipal Waste (kg/cap)',  fmt(oecd(c,'municipalWaste'), 0), oecdyr(c,'municipalWaste')),
   ]);
 }
 
 function renderOECDInequality(c) {
-  return section('Inequality — OECD', 'oecd', 'OECD Inequality & Income', [
+  return section('Inequality & Income', 'wb', 'Inequality & Income', [
     dataRow('Gini Coefficient',        fmt(oecd(c,'gini'), 2),        oecdyr(c,'gini')),
     dataRow('Poverty Rate',            fmtPct(oecd(c,'povertyRate')), oecdyr(c,'povertyRate')),
     dataRow('Median Household Income', fmtUSD(oecd(c,'medianIncome')),oecdyr(c,'medianIncome')),
@@ -631,7 +631,7 @@ function renderOWIDFood(c) {
 // ── COMPONENT HELPERS ────────────────────────────────
 
 function section(labelText, srcClass, title, rows) {
-  const srcLabel = { wb: 'World Bank', imf: 'IMF', un: 'UN', oecd: 'OECD', owid: 'OWID', unesco: 'UNESCO', sipri: 'SIPRI' }[srcClass] || srcClass.toUpperCase();
+  const srcLabel = { wb: 'World Bank', imf: 'IMF', un: 'UN', owid: 'OWID', unesco: 'UNESCO', sipri: 'SIPRI' }[srcClass] || srcClass.toUpperCase();
   const content = rows.filter(Boolean).join('');
   return `
     <p class="section-label">${labelText} <span class="src-badge src-${srcClass}">${srcLabel}</span></p>
