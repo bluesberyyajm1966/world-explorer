@@ -1,0 +1,13 @@
+# Data scripts (local only)
+*.py
+*.xlsx
+*.csv
+
+# Large unused data files
+data/worldbank/worldbank_data.json
+data/un/un_sdg_goals.json
+
+# Mac junk
+.DS_Store
+__pycache__/
+*.pyc
