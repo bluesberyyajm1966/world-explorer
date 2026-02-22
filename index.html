@@ -12,30 +12,52 @@
   <!-- HEADER -->
   <header>
     <div class="logo">World<span>Explorer</span></div>
-    <div class="header-meta">Powered by World Bank · IMF · UN · OWID · UNESCO · SIPRI</div>
+    <nav class="header-nav">
+      <button class="nav-btn" onclick="showMap()">🗺 Map</button>
+      <button class="nav-btn" onclick="showRankings()">🏆 Rankings</button>
+      <button class="nav-btn" id="randomBtn">🎲 Random</button>
+      <button class="nav-btn" onclick="showAbout()">ℹ Sources</button>
+    </nav>
   </header>
 
   <!-- SHELL -->
   <div class="shell">
-
-    <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="search-wrap">
-        <input type="text" class="search-box" id="searchInput" placeholder="Search countries...">
-        <div class="filter-row" id="filterRow">
-          <button class="filter-btn active" data-region="all">All</button>
+        <div class="search-input-wrap">
+          <input type="text" class="search-box" id="searchInput" placeholder="Search countries… (press /)">
+          <button class="search-clear" id="searchClear" title="Clear search" style="display:none">✕</button>
+        </div>
+        <div class="toolbar">
+          <div class="filter-row" id="filterRow">
+            <button class="filter-btn active" data-region="all">All</button>
+          </div>
+          <button class="tool-btn" id="filterToggle" title="Filters &amp; Sort">⚙</button>
+        </div>
+        <div class="filter-panel" id="filterPanel">
+          <div class="panel-section">
+            <div class="panel-label">Income Level</div>
+            <div class="filter-row" id="incomeRow">
+              <button class="filter-btn active" data-income="all">All</button>
+            </div>
+          </div>
+          <div class="panel-section">
+            <div class="panel-label">Sort by</div>
+            <div class="sort-row">
+              <select class="sort-select" id="sortSelect">
+                <option value="name">Name (A–Z)</option>
+              </select>
+              <button class="sort-dir-btn" id="sortDirBtn" title="Toggle direction">↑</button>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="country-count" id="countLabel">Loading...</div>
+      <div class="country-count" id="countLabel">Loading…</div>
       <div class="country-list" id="countryList">
-        <div class="loading-state">
-          <div class="spinner"></div>
-          Loading countries...
-        </div>
+        <div class="loading-state"><div class="spinner"></div>Loading countries…</div>
       </div>
     </aside>
 
-    <!-- MAIN -->
     <main id="main">
       <div class="empty-state">
         <div class="empty-globe">🌍</div>
@@ -43,12 +65,97 @@
         <p>Choose any country from the sidebar to explore its profile, economic data, demographics, health indicators, and more.</p>
       </div>
     </main>
-
+    <button class="back-to-top" id="backToTop" title="Back to top" onclick="document.getElementById('main').scrollTo({top:0,behavior:'smooth'})">↑</button>
   </div>
 
-  <!-- TOAST -->
   <div class="toast" id="toast"></div>
 
+  <!-- RANKINGS MODAL -->
+  <div class="modal-overlay" id="rankModal" onclick="if(event.target===this)closeRankModal()">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <h2>🏆 Rankings</h2>
+        <div class="modal-controls">
+          <select class="sort-select" id="rankField" style="width:200px"></select>
+          <select class="sort-select" id="rankDir" style="width:90px">
+            <option value="desc">Highest</option>
+            <option value="asc">Lowest</option>
+          </select>
+        </div>
+        <button class="modal-close" onclick="closeRankModal()">✕</button>
+      </div>
+      <div class="rank-list" id="rankList"></div>
+    </div>
+  </div>
+
+  <!-- MAP MODAL -->
+  <div class="modal-overlay" id="mapModal" onclick="if(event.target===this)closeMapModal()">
+    <div class="modal-panel modal-panel--map">
+      <div class="modal-header">
+        <h2>🌍 World Map</h2>
+        <button class="modal-close" onclick="closeMapModal()">✕</button>
+      </div>
+      <div class="map-container" id="mapContainer">
+        <canvas id="globeCanvas"></canvas>
+        <div class="globe-tooltip" id="globeTooltip"></div>
+        <div class="globe-hint" id="globeHint">🖱 Drag to rotate · Scroll to zoom · Click to select · Double-click resumes spin</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT / SOURCES MODAL -->
+  <div class="modal-overlay" id="aboutModal" onclick="if(event.target===this)closeAboutModal()">
+    <div class="modal-panel modal-panel--about">
+      <div class="modal-header">
+        <h2>ℹ About &amp; Data Sources</h2>
+        <button class="modal-close" onclick="closeAboutModal()">✕</button>
+      </div>
+      <div class="about-body">
+        <p class="about-intro">World Explorer aggregates open data from six international organisations. All data is used for informational purposes. Years shown next to each figure indicate the most recent year available for that indicator.</p>
+        <div class="source-grid">
+          <a class="source-card" href="https://data.worldbank.org" target="_blank" rel="noopener">
+            <span class="src-badge src-wb">World Bank</span>
+            <div class="source-card-title">World Bank Open Data</div>
+            <div class="source-card-desc">Country classifications, GDP, trade, poverty, demographics, health, education, and environment indicators from the World Development Indicators.</div>
+            <div class="source-card-url">data.worldbank.org</div>
+          </a>
+          <a class="source-card" href="https://www.imf.org/en/Publications/WEO" target="_blank" rel="noopener">
+            <span class="src-badge src-imf">IMF</span>
+            <div class="source-card-title">IMF World Economic Outlook</div>
+            <div class="source-card-desc">Macroeconomic forecasts and historical data — GDP, inflation, unemployment, fiscal balances, debt, current accounts, trade volumes, and investment.</div>
+            <div class="source-card-url">imf.org · World Economic Outlook Database</div>
+          </a>
+          <a class="source-card" href="https://stats.oecd.org" target="_blank" rel="noopener">
+            <span class="src-badge src-oecd">OECD</span>
+            <div class="source-card-title">OECD Statistics</div>
+            <div class="source-card-desc">Labour markets, taxation, social spending, education (PISA), health systems, innovation (R&D), inequality, and environment indicators for member and partner countries.</div>
+            <div class="source-card-url">stats.oecd.org</div>
+          </a>
+          <a class="source-card" href="https://population.un.org/wpp" target="_blank" rel="noopener">
+            <span class="src-badge src-un">UN</span>
+            <div class="source-card-title">United Nations — UNDP &amp; UNPD</div>
+            <div class="source-card-desc">Human Development Index (HDI), gender indices, population estimates and projections, fertility, mortality, migration, and urbanisation from UNDP and UN Population Division.</div>
+            <div class="source-card-url">population.un.org · hdr.undp.org</div>
+          </a>
+          <a class="source-card" href="https://ourworldindata.org" target="_blank" rel="noopener">
+            <span class="src-badge src-owid">OWID</span>
+            <div class="source-card-title">Our World in Data</div>
+            <div class="source-card-desc">CO₂ and greenhouse gas emissions, energy mix, child mortality, health metrics, food supply, poverty, governance, and society indicators compiled from primary sources.</div>
+            <div class="source-card-url">ourworldindata.org</div>
+          </a>
+          <a class="source-card" href="https://uis.unesco.org" target="_blank" rel="noopener">
+            <span class="src-badge src-unesco">UNESCO</span>
+            <div class="source-card-title">UNESCO Institute for Statistics</div>
+            <div class="source-card-desc">Education enrolment and completion rates, literacy, teacher ratios, gender parity, school infrastructure, R&D expenditure, and science &amp; innovation indicators.</div>
+            <div class="source-card-url">uis.unesco.org</div>
+          </a>
+        </div>
+        <p class="about-footer">Geographic data rendered from <a href="https://github.com/topojson/world-atlas" target="_blank" rel="noopener">Natural Earth / world-atlas</a> via TopoJSON. 3D globe powered by <a href="https://threejs.org" target="_blank" rel="noopener">Three.js</a>.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
